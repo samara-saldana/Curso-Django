@@ -1,0 +1,2 @@
+class StockInsuficienteError(Exception):
+    pass
