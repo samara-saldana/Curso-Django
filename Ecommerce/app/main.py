@@ -1,217 +1,159 @@
-
 from core_engine.servicio import CartService
 from core_engine.repositorios import CartRepositorySQLAlchemy
 from core_engine.models import Usuario, Producto, Orden, DetalleOrden, Base, engine
 from sqlalchemy.orm import Session
 
-Base.metadata.create_all(engine)
 
 def inicializar_db():
     Base.metadata.create_all(engine)
-    print("Base de datos inicializada correctamente")
+    print("\n Base de datos inicializada correctamente")
 
 
 def crear_datos_iniciales():
     with Session(engine) as session:
-
         if session.query(Usuario).count() == 0:
-
-            usuario = Usuario(
-                email="cliente@mail.com",
-                nombre="Samara"
-            )
-
-            productos = [
-                Producto(
-                    sku="P001",
-                    nombre="Mouse",
-                    precio=300,
-                    stock=20
-                ),
-                Producto(
-                    sku="P002",
-                    nombre="Teclado",
-                    precio=500,
-                    stock=15
-                ),
-                Producto(
-                    sku="P003",
-                    nombre="Monitor",
-                    precio=3000,
-                    stock=5
-                )
-            ]
+            usuario = Usuario(email="cliente@mail.com", nombre="Cliente")
+            productos = [Producto(sku="P001", nombre="Mouse", precio=300,stock=20),
+                Producto(sku="P002", nombre="Teclado", precio=500, stock=15),
+                Producto(sku="P003", nombre="Monitor", precio=3000, stock=5)]
 
             session.add(usuario)
             session.add_all(productos)
-
             session.commit()
 
-            print("Datos iniciales creados")
+            print("\n Datos iniciales creados")
+
+
+def crear_usuario():
+    with Session(engine) as session:
+        email = input("Ingrese su email: ").lower()
+        nombre= input("Ingrese su nombre: ").lower()
+        usuario = Usuario(email=email,nombre=nombre)
+
+        session.add(usuario)
+        session.commit()
+
+        usuario_id = session.query(Usuario.id).filter(Usuario.email == email).one_or_none()
+
+        print(f"\ Usuario agregado con exito, su ID de usuario es: {usuario_id[0]}")
 
 
 def mostrar_productos():
-
     with Session(engine) as session:
-
         productos = session.query(Producto).all()
 
         if not productos:
             print("No hay productos disponibles")
             return False
 
-        print("\nPRODUCTOS DISPONIBLES")
-        print("-"*40)
+        print("\n PRODUCTOS DISPONIBLES:")
 
         for producto in productos:
-            print(
-                f"ID: {producto.id} | "
-                f"{producto.nombre} | "
-                f"${producto.precio} | "
-                f"Stock: {producto.stock}"
-            )
+            print(f"\n ID: {producto.id} - Nombre: {producto.nombre} - Precio: ${producto.precio} - Stock: {producto.stock}")
+    return True
 
-        return True
+
+def mostrar_usuarios():
+    with Session(engine) as session:
+        usuarios = session.query(Usuario).all()
+
+        if not usuarios:
+            print("No hay usuarios en la base de datos")
+            return
+
+        print("\n USUARIOS:")
+
+        for  usuario in usuarios:
+            print(f"\n ID: {usuario.id} - Nombre: {usuario.nombre} - Email: {usuario.email}")
+
 
 def mostrar_ordenes():
-
     with Session(engine) as session:
-
         ordenes = session.query(Orden).all()
-
         if not ordenes:
             print("No hay ordenes disponibles")
-            return False
-
-        print("\nORDENES PROCESADAS")
-        print("-"*40)
+            return
+        
+        print("\n ORDENES PROCESADAS:")
 
         for orden in ordenes:
-            print(
-                f"ID: {orden.id} | "
-                f"{ orden.usuario_id} | "
-                f"${orden.total} | "
-                f"Stock: {orden.estado} | "
-                f"${orden.fecha_creacion}"
+            print(f"\n ID:{orden.id} - ID de Usuario: {orden.usuario_id}  - Total de la Orden: ${orden.total} - Estad de la orden: {orden.estado} - Fecha de creacion: {orden.fecha_creacion}")
 
-            )
+        detalle_id = input("\nIngrese el ID de la orden para saber los detalles o presione enter para regresar al menu principal: ")
+        if detalle_id != "":
+            detalles = session.query(DetalleOrden).filter(DetalleOrden.orden_id == int(detalle_id)).all()
+            for detalle in detalles:
+                print("\n Mostrando el detalle de la orden:")
+                print(f"\n ID:{detalle.id} - ID de Orden: {detalle.orden_id}  - ID del producto: {detalle.producto_id} - Cantiddad: {detalle.cantidad} - Precio unitario: {detalle.precio_unitario_historico}")
 
-        return True
 
 def comprar_producto():
-
     repo = CartRepositorySQLAlchemy()
     service = CartService(repo)
 
     try:
-
         hay_productos = mostrar_productos()
 
         if not hay_productos:
             return
 
+        usuario_id = int(input("Ingrese su ID de usuario"))
+        producto_id = int(input("Ingrese el ID del producto: "))
+        cantidad = int(input("Ingrese la cantidad que deseas comprar: "))
 
-        producto_id = int(
-            input("\nIngresa el ID del producto: ")
-        )
+        item = service.agregar_item(usuario_id=usuario_id, producto_id=producto_id, cantidad=cantidad)
 
-        cantidad = int(
-            input("Cantidad que deseas comprar: ")
-        )
+        print(f"\n Producto agregado al carrito")
 
+        confirmar = input("¿Deseas comprar los productos agregados a tu carrito? (s/n): ").lower()
 
-        item = service.agregar_item(
-            usuario_id=1,
-            producto_id=producto_id,
-            cantidad=cantidad
-        )
-
-
-        print("\nProducto agregado al carrito")
-        print(item)
-
-
-        confirmar = input(
-            "\n¿Deseas finalizar compra? (s/n): "
-        )
-
-
-        if confirmar.lower() == "s":
-
-            orden = service.procesar_checkout(
-                usuario_id=1,
-                items_carrito=[item]
-            )
-
-            print("\nCompra realizada correctamente")
-            print(
-                f"Orden número: {orden.id}"
-            )
+        if confirmar == "s":
+            orden = service.procesar_checkout(usuario_id=1, items_carrito=[item])
+            print(f"Compra con ID ({orden.id}) realizada con exito")
 
         else:
             print("Compra cancelada")
 
-
     except Exception as e:
+        print(f"Ocurrio un error al comprar el producto: {e}")
 
-        print(f"\nError: {e}")
 
 if __name__ == '__main__':
-
     while True:
+        print("--\n Sistema ecommerce--")
+        print("1. Inicializar base de datos")
+        print("2. Crear datos iniciales")
+        print("3. Crear usuario")
+        print("4. Empezar a comprar")
+        print("5. Mostrar ordenes")
+        print("6. Mostrar usuarios")
+        print("7. Salir")
 
-        print("\n" + "="*50)
-        print("      SISTEMA E-COMMERCE")
-        print("="*50)
-
-        print("""
-1. Inicializar base de datos
-2. Crear datos iniciales
-3. Mostrar productos
-4. Comprar producto
-5. Mostrar ordenes
-6. Salir
-        """)
-
-        opcion = input("Selecciona una opción: ")
-
+        opcion = input("\n Selecciona una opción: ")
 
         if opcion == "1":
-
             inicializar_db()
-
-
         elif opcion == "2":
-
             crear_datos_iniciales()
-
-
         elif opcion == "3":
-
-            mostrar_productos()
-
-
+            crear_usuario()
         elif opcion == "4":
-
             comprar_producto()
-        
         elif opcion == "5":
-
             mostrar_ordenes()
-
-
         elif opcion == "6":
-
-            print("Cerrando aplicación...")
+            mostrar_usuarios()
+        elif opcion == "7":
+            print("Cerrando el sistema...")
             break
-
-
         else:
-
-            print("Opción inválida")
+            print("Opción inválida, intenta de nuevo")
 
 
 
 
 #docker compose -f Docker-compose-main.yml up -d subo el contenedor
-    # docker exec -it ecommerce_python python main.py       ejecuta el main
+# docker exec -it ecommerce_python python main.py       ejecuta el main
+
+
+#      

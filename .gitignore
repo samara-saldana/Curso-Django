@@ -222,3 +222,7 @@ __marimo__/
 *.sqlite3
 *.sql
 *.db
+
+crm_venv/
+django_venv
+ecommerce_venv
