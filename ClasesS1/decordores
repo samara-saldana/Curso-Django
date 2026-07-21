@@ -1,0 +1,107 @@
+def mi_decorador(funcion_original):
+    def funcion_envolvente():
+        print("Antes de ejecutar la función.")
+        funcion_original()
+        print("Después de ejecutar la función.")
+    return funcion_envolvente
+
+
+
+@mi_decorador
+def saludar():
+    print("¡Hola, mundo!")
+
+saludar()
+
+
+"""
+Los decoradores en Python son funciones que permiten modificar o extender el comportamiento de otras funciones o métodos sin alterar su código original. Esto se logra envolviendo la función original con una nueva funcionalidad, lo que hace que el código sea más limpio, reutilizable y "Pythonic".
+
+Conceptos Clave
+
+Un decorador es una función que toma otra función como argumento y retorna una nueva función. Esto se logra utilizando tres principios fundamentales:
+
+Funciones dentro de funciones: Se pueden definir funciones dentro de otras funciones.
+
+Retorno de funciones: Una función puede retornar otra función.
+
+Funciones como argumentos: Las funciones pueden ser pasadas como argumentos a otras funciones.
+
+Un decorador se aplica utilizando el símbolo @ antes de la definición de la función que se desea decorar.
+
+
+Decoradores con Parámetros
+
+Si la función decorada necesita aceptar parámetros, se pueden usar *args y **kwargs para manejar cualquier número de argumentos.
+
+def mi_decorador(funcion_original):
+def funcion_envolvente(*args, **kwargs):
+print("Antes de ejecutar la función.")
+resultado = funcion_original(*args, **kwargs)
+print("Después de ejecutar la función.")
+return resultado
+return funcion_envolvente
+
+@mi_decorador
+def sumar(a, b):
+return a + b
+
+print(sumar(5, 3))
+Copiar
+Salida:
+
+Antes de ejecutar la función
+Después de ejecutar la función
+8
+Copiar
+Decoradores con Argumentos
+
+Un decorador también puede aceptar sus propios argumentos envolviendo la función decoradora en otra función.
+
+def decorador_con_argumentos(mensaje):
+def mi_decorador(funcion_original):
+def funcion_envolvente(*args, **kwargs):
+print(f"{mensaje} - Antes de ejecutar la función.")
+resultado = funcion_original(*args, **kwargs)
+print(f"{mensaje} - Después de ejecutar la función.")
+return resultado
+return funcion_envolvente
+return mi_decorador
+
+@decorador_con_argumentos("LOG")
+def multiplicar(a, b):
+return a * b
+
+print(multiplicar(4, 5))
+Copiar
+Salida:
+
+LOG - Antes de ejecutar la función
+LOG - Después de ejecutar la función
+20
+Copiar
+Ejemplo Práctico: Logger
+
+Un decorador puede ser usado para registrar información sobre las funciones que se ejecutan.
+
+def logger(funcion_original):
+import logging
+logging.basicConfig(filename=f"{funcion_original.__name__}.log", level=logging.INFO)
+
+def funcion_envolvente(*args, **kwargs):
+logging.info(f"Ejecutando con args: {args}, kwargs: {kwargs}")
+return funcion_original(*args, **kwargs)
+return funcion_envolvente
+
+@logger
+def dividir(a, b):
+return a / b
+
+dividir(10, 2)
+Copiar
+Este decorador crea un archivo de registro donde se guarda información sobre las llamadas a la función dividir.
+
+Consideraciones Finales
+
+Los decoradores son ampliamente utilizados en frameworks como Flask y Django para tareas como autenticación, manejo de rutas y validación. Aunque al principio pueden parecer complejos, su uso mejora significativamente la legibilidad y mantenibilidad del código.
+"""
