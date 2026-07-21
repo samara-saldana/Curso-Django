@@ -1,0 +1,115 @@
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""def mostrar_empresas_disponibles(cursor) -> bool:
+    
+
+def obtener_id_empresa(cursor,emp:str) -> str:
+    cursor.execute("SELECT id, nombre_empresa FROM empresas")
+    empresas= cursor.fetchall()
+
+    if not empresas:
+        print("No existe ninguna empresa, se debe registrar una")
+        return ""
+    
+    for empresa in empresas:
+        if emp == empresa[1]:
+            return empresa[1]
+
+def ver_listaempresas():
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    try:
+        hay_empresas = mostrar_empresas_disponibles(cursor)
+
+        if not hay_empresas:
+            print(f"Se debe de registrar una empresa")
+            return
+        
+        empresa_id = input("\n Ingresa el Id de la empresa elegida para ver a sus prospectos")
+
+        cursor.execute('''
+            SELECT p.nombre, p.apellido, p.correo, p.presupuesto_estimado, p.clasificacion, p.prioridad, e.nombre_empresa
+            FROM prospectos p
+            JOIN empresas e ON p.empresa_id = e.id
+            WHERE e.id = ?
+        ''', (empresa_id,))
+
+        resultados = cursor.fetchall()
+        print(resultados)
+
+        if not resultados:
+            print("La lista de empresas esta vacia")
+            return
+        nombre_empresa = resultados[0][6]
+        mi_empresa = Empresa(nombre_empresa)
+
+        for fila in resultados:
+            nombre, apellido, correo, presupuesto_estimado, *_ = fila
+
+            p = Lead(nombre, apellido, correo, presupuesto_estimado)
+
+            mi_empresa.almacenar_prospecto(p)
+        
+        print(f"El potencial de ventas de la empresa es: {mi_empresa.potencial_ventas()}")
+
+    except Exception as e:
+        print(f"Error al leer la base de datos: {e}")
+
+    finally:
+        conexion.close()"""
+
+
+    """try:
+        while True:
+            print("\n" + "=" *50)
+            print("Consola interactiva")
+            print("="*50)
+
+
+            inicializar_db()
+
+            print("1. Resgitrar una empresa (Oprima 1)")
+            print("2. Registrar un prospecto (Oprima 2)")  
+            print("3. Ver la lista de registros (Oprima 3)")
+            print("4. Salir del registro (Oprima 4)")
+            print("="*50)
+
+            opcion = input("Elige una opcion: ")
+
+            match opcion:
+                case '1':
+                    registro_empresa()
+                case '2':
+                    registro_prospecto()
+                case '3':   
+                    ver_listaempresas() 
+                case '4':
+                    print("Cerrando aplicación")
+                    break
+                case _:
+                    print("Opcion no valida")
+
+    except KeyboardInterrupt:
+        print("Programa detendo por el usuario")
+"""

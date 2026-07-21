@@ -1,0 +1,82 @@
+[
+    {
+        "nombre": "Leanne Graham",
+        "latitud": "-37.3159",
+        "longitud": "81.1496",
+        "ciudad": "Gwenborough",
+        "telefono": "1-770-736-8031 x56442",
+        "pagina_web": "hildegard.org"
+    },
+    {
+        "nombre": "Ervin Howell",
+        "latitud": "-43.9509",
+        "longitud": "-34.4618",
+        "ciudad": "Wisokyburgh",
+        "telefono": "010-692-6593 x09125",
+        "pagina_web": "anastasia.net"
+    },
+    {
+        "nombre": "Clementine Bauch",
+        "latitud": "-68.6102",
+        "longitud": "-47.0653",
+        "ciudad": "McKenziehaven",
+        "telefono": "1-463-123-4447",
+        "pagina_web": "ramiro.info"
+    },
+    {
+        "nombre": "Patricia Lebsack",
+        "latitud": "29.4572",
+        "longitud": "-164.2990",
+        "ciudad": "South Elvis",
+        "telefono": "493-170-9623 x156",
+        "pagina_web": "kale.biz"
+    },
+    {
+        "nombre": "Chelsey Dietrich",
+        "latitud": "-31.8129",
+        "longitud": "62.5342",
+        "ciudad": "Roscoeview",
+        "telefono": "(254)954-1289",
+        "pagina_web": "demarco.info"
+    },
+    {
+        "nombre": "Mrs. Dennis Schulist",
+        "latitud": "-71.4197",
+        "longitud": "71.7478",
+        "ciudad": "South Christy",
+        "telefono": "1-477-935-8478 x6430",
+        "pagina_web": "ola.org"
+    },
+    {
+        "nombre": "Kurtis Weissnat",
+        "latitud": "24.8918",
+        "longitud": "21.8984",
+        "ciudad": "Howemouth",
+        "telefono": "210.067.6132",
+        "pagina_web": "elvis.io"
+    },
+    {
+        "nombre": "Nicholas Runolfsdottir V",
+        "latitud": "-14.3990",
+        "longitud": "-120.7677",
+        "ciudad": "Aliyaview",
+        "telefono": "586.493.6943 x140",
+        "pagina_web": "jacynthe.com"
+    },
+    {
+        "nombre": "Glenna Reichert",
+        "latitud": "24.6463",
+        "longitud": "-168.8889",
+        "ciudad": "Bartholomebury",
+        "telefono": "(775)976-6794 x41206",
+        "pagina_web": "conrad.com"
+    },
+    {
+        "nombre": "Clementina DuBuque",
+        "latitud": "-38.2386",
+        "longitud": "57.2232",
+        "ciudad": "Lebsackbury",
+        "telefono": "024-648-3804",
+        "pagina_web": "ambrose.net"
+    }
+]
